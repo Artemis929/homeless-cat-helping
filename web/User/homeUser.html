@@ -5,75 +5,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用户主页</title>
-    <style>
-        .whole {
-            align-content: center;
-            background-color: #f6f9f9d9;
-            margin: auto;
-            padding: 50px;
-            width: 750px;
-            height: 800px;
-            text-align: center;
-            font-family: 微软雅黑;
-            border-radius: 4px;
-        }
-
-        table {
-            margin: auto;
-        }
-
-        body {
-            text-align: center;
-        }
-
-        h3 {
-            font-size: xx-large;
-        }
-
-        table {
-            width: 50%;
-            margin: 0 auto;
-            border: 1px black solid;
-
-            /* border-spacing：指定边框之间的距离；边框之间虽然没有距离了，但是实际上是两条边框的和，看起来是变粗了 */
-            /* border-spacing: 0; */
-
-            /*border-collapse:collapse；设置边框的合并；真正的将两条边框合并成一条边框 */
-            border-collapse: collapse;
-
-            /* 默认情况下元素在td中是垂直居中的，可以通过vectical-align来修改 */
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        /* 如果表格中没有使用tbody而是直接使用tr，那么浏览器会自动创建一个tbody，并且将tr全都放到tbody中
-               所以说，tr不是table的子元素 */
-        tbody tr:nth-child(odd) {
-            background-color: rgb(211, 216, 188);
-        }
-
-        td {
-            border: 1px black solid;
-        }
-    </style>
-    <link rel="stylesheet" href="../style.css">
+    <!--重置样式-->
+    <link href="../css/reset.css" rel="stylesheet">
+    <!--幻灯片-->
+    <link href="../css/hwslider.css" rel="stylesheet">
+    <!--bootstrap css 文件-->
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
+    <!--字体 -->
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!--自定义 -->
+    <link href="../css/style.css" rel="stylesheet">
 </head>
 
 <body>
-    <h3>${sessionScope.user.name}你好！欢迎来到</h3>
-    <div class="nav">
-        <img src="../imge/logo.png" alt="logo" width="150px">
+    <!-- 头部 -->
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <!-- 移动端导航图标 -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="#" class="navbar-brand"><img src="../imge/logo.png" alt="logo" height="85px"></a>
+            </div>
+            <!-- 导航-->
+            <div class=" collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="homeUser.html" class="active">首页 <span class="sr-only"></span></a></li>
+                    <li><a href="CatList.html">查看流浪猫</a></li>
+                    <li><a href="HomeList.html">爱心猫屋</a></li>
+                    <li><a href="NeuterApplication.html">绝育申请</a></li>
+                    <li><a href="FeedRecord.html">我的投喂记录</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--幻灯片-->
+    <div id="hwslider" class="hwslider">
         <ul>
-            <li> <a href="UserHome.html">首页</a></li>
-            <li> <a href="CatList.html">猫咪列表</a></li>
-            <li> <a href="HomeList.html">爱心猫屋</a></li>
-            <li> <a href="NeuterApplication.html">绝育申请</a></li>
-            <li> <a href="FeedRecord.html">我的投喂记录</a></li>
-
+            <li>
+                <a><img src="../imge/banner-1.jpg" /></a>
+            </li>
+            <li>
+                <a><img src="../imge/banner-2.jpg" /></a>
+            </li>
         </ul>
     </div>
-    <div></div>
+    <div>
+        <!-- 最新投喂记录 -->
+        <span>
 
+        </span>
+        <!-- 最新绝育申请 -->
+        <span>
+
+        </span>
+    </div>
+
+    <!--尾部-->
+    <footer>
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-12 ">
+                        <div class="single-footer-widget">
+                            <div class="section-heading">
+                                <h4>关于我们</h4>
+                                <div class="line"></div>
+                            </div>
+                            <p>一家流浪猫救助机构
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 f1">
+                        <div class="single-footer-widget">
+                            <div class="section-heading">
+                                <h4>服务</h4>
+                                <div class="line"></div>
+                            </div>
+                            <ul class="footer-service">
+                                <li><a href="#"><span class="fa fa-check"></span>云喂养</a></li>
+                                <li><a href="#"><span class="fa fa-check"></span>捕捉 绝育 放回</a></li>
+                                <li><a href="#"><span class="fa fa-check"></span>设立爱心猫屋</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 f2">
+                        <div class="single-footer-widget">
+                            <div class="section-heading">
+                                <h4>关注我们</h4>
+                                <div class="line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="single-footer-widget">
+                            <div class="section-heading">
+                                <h4>联系我们</h4>
+                                <div class="line"></div>
+                            </div>
+                            <address class="contact-info">
+                                <p><span class="fa fa-home"></span>123456789</p>
+                                <p><span class="fa fa-phone"></span>123456789</p>
+                                <p><span class="fa fa-envelope"></span>123456789</p>
+                            </address>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--jq和bootstrapjs 文件 -->
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/bootstrap.js"></script>
+    <!--幻灯片JS 文件 -->
+    <script type="text/javascript" src="../js/jquery.hwslider.min.js"></script>
+    <script>
+        $(function () {
+            $("#hwslider").hwSlider({
+                height: 220,
+                autoPlay: true,
+                arrShow: true,
+                dotShow: true,
+                touch: false,
+            });
+        });
+    </script>
 
 </body>
 

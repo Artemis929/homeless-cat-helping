@@ -45,10 +45,10 @@
     </style>
 </head>
 
-<body style="background: fixed url(imge/banner-2.jpg) no-repeat center center;">
+<body style="background: fixed url(imge/bg2.jpg) no-repeat center center;">
     <div class="title">
         <img src="imge/logo.png" alt="logo" width="350px">
-        <h1>账号登录</h1>
+        <h2>账号登录</h2>
     </div>
     <div class="regform">
         <script type="text/javascript">
@@ -64,20 +64,23 @@
             }
         </script>
 
-        <form action="login" method="post" onsubmit="return check(this)" style="text-align: center;" name="">
+        <form action="login" method="post" onsubmit="return check(this)" style="text-align: center;">
             请选择您的身份：
             <select name="type">
                 <option value="0">用户</option>
                 <option value="1">负责人</option>
             </select><br><br>
-            账号：<input type="text" name="id" placeholder="ID" id="VolunteerID"><br><br>
-            密码：<input type="password" placeholder="password"><br><br>
-            <input type="submit" value="登录"><br><br>
+            账号：<input type="text" placeholder="ID" id="userID" name="userID"><br><br>
+            密码：<input type="password" placeholder="password" id="password" name="password"><br><br>
+            <input type="submit" value="登录" size="20px" class="btn"><br><br>
 
         </form>
         <font color="red">暂无账号？</font>
         <a href="register.html">用户注册</a>
     </div>
+    <c:if test="${requestScope.error != null}">
+        <span class="error" style="color: red ">${error} </span>
+    </c:if>
 </body>
 
 </html>
