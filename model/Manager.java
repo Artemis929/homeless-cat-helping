@@ -2,17 +2,17 @@ package org.zuel.test.model;
 
 public class Manager {
     private Integer ManagerID;
-    private String ManagerName;
     private String ManagerSecret;
+    private String ManagerName;
     private String TelephoneNumber;
 
     public Manager(){}
 
-    public Manager(Integer ManagerID,String ManagerName,String ManagerSecret,String TelephoneNumber)
+    public Manager(Integer ManagerID,String ManagerSecret,String ManagerName,String TelephoneNumber)
     {
         this.ManagerID=ManagerID;
-        this.ManagerName=ManagerName;
         this.ManagerSecret=ManagerSecret;
+        this.ManagerName=ManagerName;
         this.TelephoneNumber=TelephoneNumber;
     }
 
@@ -32,8 +32,8 @@ public class Manager {
     public String tostring() {
         StringBuffer str=new StringBuffer();
         str.append("[ManagerID=").append(this.getManagerID())
-                .append(",ManagerName=").append(this.getManagerName())
                 .append(",ManagerSecret=").append(this.getManagerSecret())
+                .append(",ManagerName=").append(this.getManagerName())
                 .append(",TelephoneNumber=").append(this.getTelephoneNumber())
                 .append("]");
         return str.toString();
