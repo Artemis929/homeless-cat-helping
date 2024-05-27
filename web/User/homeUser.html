@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户主页</title>
+    <style>
+        .whole {
+            align-content: center;
+            background-color: #f6f9f9d9;
+            margin: auto;
+            padding: 50px;
+            width: 750px;
+            height: 800px;
+            text-align: center;
+            font-family: 微软雅黑;
+            border-radius: 4px;
+        }
+
+        table {
+            margin: auto;
+        }
+
+        body {
+            text-align: center;
+        }
+
+        h3 {
+            font-size: xx-large;
+        }
+
+        table {
+            width: 50%;
+            margin: 0 auto;
+            border: 1px black solid;
+
+            /* border-spacing：指定边框之间的距离；边框之间虽然没有距离了，但是实际上是两条边框的和，看起来是变粗了 */
+            /* border-spacing: 0; */
+
+            /*border-collapse:collapse；设置边框的合并；真正的将两条边框合并成一条边框 */
+            border-collapse: collapse;
+
+            /* 默认情况下元素在td中是垂直居中的，可以通过vectical-align来修改 */
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* 如果表格中没有使用tbody而是直接使用tr，那么浏览器会自动创建一个tbody，并且将tr全都放到tbody中
+               所以说，tr不是table的子元素 */
+        tbody tr:nth-child(odd) {
+            background-color: rgb(211, 216, 188);
+        }
+
+        td {
+            border: 1px black solid;
+        }
+    </style>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <h3>${sessionScope.user.name}你好！欢迎来到</h3>
+    <div class="nav">
+        <img src="../imge/logo.png" alt="logo" width="150px">
+        <ul>
+            <li> <a href="UserHome.html">首页</a></li>
+            <li> <a href="CatList.html">猫咪列表</a></li>
+            <li> <a href="HomeList.html">爱心猫屋</a></li>
+            <li> <a href="NeuterApplication.html">绝育申请</a></li>
+            <li> <a href="FeedRecord.html">我的投喂记录</a></li>
+
+        </ul>
+    </div>
+    <div></div>
+
+
+</body>
+
+</html>

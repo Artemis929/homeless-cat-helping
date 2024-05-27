@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StrayCats-Helping</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: fixed url(imge/banner-2.jpg) no-repeat center center;
+        }
+
+        div {
+            font-size: 18px;
+            font-family: 微软雅黑;
+        }
+
+        input {
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body class="center">
+    <div>
+        <img src="imge/logo.png" alt="logo" width="350px">
+    </div>
+    <div>
+        <h1>用户注册</h1>
+        <form action="login.php" method="get" name="Volunteer">
+            昵称：<input type="text" name="VolunteerName" placeholder="请输入您的昵称"><br><br>
+            密码：<input type="password" placeholder="请输入您的密码"><br><br>
+            邮箱：<input type="email" name="VolunteerEmail" id="" placeholder="请输入您的邮箱"><br><br>
+            <input type="submit" value="提交">
+            <input type="reset" value="重置"><br><br>
+            <input type="checkbox" id="yes" checked="checked"> <label for="yes">我同意注册条款和用户加入标准</label><br><br>
+            <a href="login.html">已有账号？立即登录</a>
+        </form>
+    </div>
+</body>
+
+</html>
