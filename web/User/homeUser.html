@@ -25,6 +25,7 @@
 </head>
 
 <body>
+    <div id="welcomeMessage" style="text-align: right;"></div>
     <!-- 头部 -->
     <nav class="navbar navbar-default">
         <div class="container">
@@ -39,8 +40,9 @@
                 </button>
                 <a href="#" class="navbar-brand"><img src="../imge/logo.png" alt="logo" height="85px"></a>
             </div>
+
             <!-- 导航-->
-            <div class=" collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="homeUser.html" class="active">首页 <span class="sr-only"></span></a></li>
                     <li><a href="CatList.html">查看流浪猫</a></li>
@@ -62,17 +64,46 @@
             </li>
         </ul>
     </div>
-    <div>
-        <!-- 最新投喂记录 -->
-        <span>
+    <div class="container">
+        <div class="row">
+            <!-- 最新投喂记录 -->
+            <div class="col-md-6">
+                <h3>最新投喂记录</h3>
+                <table class="table" id="feedingRecords">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>投喂人ID</th>
+                            <th>猫屋ID</th>
+                            <th>投喂量（克）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 动态填充数据 -->
+                    </tbody>
+                </table>
+            </div>
 
-        </span>
-        <!-- 最新绝育申请 -->
-        <span>
-
-        </span>
+            <!-- 最新绝育申请 -->
+            <div class="col-md-6">
+                <h3>最新绝育申请</h3>
+                <table class="table" id="neuterApplications">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>申请人</th>
+                            <th>猫咪</th>
+                            <th>绝育费用</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 动态填充数据 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
     <!--尾部-->
     <footer>
         <div class="footer-top">
@@ -84,7 +115,9 @@
                                 <h4>关于我们</h4>
                                 <div class="line"></div>
                             </div>
-                            <p>一家流浪猫救助机构
+                            <p>“StrayCats-Helping”是与智能设备云联动的网站
+                                可实现云投喂、云吸猫、云监控，
+                                更可以聚集更多的爱猫人士，一起努力推行TNR。
                             </p>
                         </div>
                     </div>
@@ -140,7 +173,65 @@
                 dotShow: true,
                 touch: false,
             });
+
+            // 获取用户信息并显示欢迎消息
+            $.ajax({
+                url: '/getUserInfo',
+                method: 'GET',
+                success: function (data) {
+                    const userInfo = JSON.parse(data);
+                    const welcomeMessage = `你好，${userInfo.VolunteerName}！  <a href="../index.html">退出</a>`;
+                    $('#welcomeMessage').html(welcomeMessage);
+                },
+                error: function () {
+                    const welcomeMessage = `你好，游客！ <a href="../index.html">退出</a>`;
+                    $('#welcomeMessage').html(welcomeMessage);
+                }
+            });
+
+            // 获取最新投喂记录
+            $.ajax({
+                url: '/getFeedingRecords',
+                method: 'GET',
+                success: function (data) {
+                    const records = JSON.parse(data);
+                    const tbody = $('#feedingRecords tbody');
+                    tbody.empty();
+                    records.forEach(record => {
+                        tbody.append(`
+                            <tr>
+                                <td>${record.Date}</td>
+                                <td>${record.VolunteerID}</td>
+                                <td>${record.HomeID}</td>
+                                <td>${record.Amount}</td>
+                            </tr>
+                        `);
+                    });
+                }
+            });
+
+            // 获取最新绝育申请
+            $.ajax({
+                url: '/getNeuterApplications',
+                method: 'GET',
+                success: function (data) {
+                    const applications = JSON.parse(data);
+                    const tbody = $('#neuterApplications tbody');
+                    tbody.empty();
+                    applications.forEach(application => {
+                        tbody.append(`
+                            <tr>
+                                <td>${application.VolunteerID}</td>
+                                <td>${application.CatID.CatName}</td>
+                                <td>${application.Price}</td>
+                                <td>${application.Status}</td>
+                            </tr>
+                        `);
+                    });
+                }
+            });
         });
+
     </script>
 
 </body>
