@@ -180,11 +180,11 @@
                 method: 'GET',
                 success: function (data) {
                     const userInfo = JSON.parse(data);
-                    const welcomeMessage = `你好，${userInfo.VolunteerName}！  <a href="../index.html">退出</a>`;
+                    const welcomeMessage = `用户${userInfo.VolunteerName}  <a href="../index.html">退出</a>`;
                     $('#welcomeMessage').html(welcomeMessage);
                 },
                 error: function () {
-                    const welcomeMessage = `你好，游客！ <a href="../index.html">退出</a>`;
+                    const welcomeMessage = `游客 <a href="../index.html">退出</a>`;
                     $('#welcomeMessage').html(welcomeMessage);
                 }
             });
