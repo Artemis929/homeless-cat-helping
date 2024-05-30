@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>查看流浪猫</title>
+    <!-- bootstrap js文件 -->
+    <script type="module">
+        import { Toast } from 'bootstrap.esm.min.js'
+
+        Array.from(document.querySelectorAll('.toast'))
+            .forEach(toastNode => new Toast(toastNode))
+    </script>
     <!--重置样式-->
     <link href="../css/reset.css" rel="stylesheet">
     <!--bootstrap css 文件-->

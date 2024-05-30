@@ -6,6 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StrayCats-Helping</title>
+    <!-- bootstrap js文件 -->
+    <script type="module">
+        import { Toast } from 'bootstrap.esm.min.js'
+
+        Array.from(document.querySelectorAll('.toast'))
+            .forEach(toastNode => new Toast(toastNode))
+    </script>
     <!--重置样式-->
     <link href="css/reset.css" rel="stylesheet">
     <!--幻灯片-->
@@ -56,15 +63,45 @@
             </li>
         </ul>
     </div>
-    <div>
-        <!-- 最新投喂记录 -->
-        <span>
+    <div class="container">
+        <div class="row">
+            <!-- 最新投喂记录 -->
+            <div class="col-md-6">
+                <h3>最新投喂记录</h3>
+                <table class="table" id="feedingRecords">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>投喂人ID</th>
+                            <th>猫屋ID</th>
+                            <th>投喂量（克）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 动态填充数据 -->
+                    </tbody>
+                </table>
+            </div>
 
-        </span>
-        <!-- 最新绝育申请 -->
-        <span>
-
-        </span>
+            <!-- 最新绝育申请 -->
+            <div class="col-md-6">
+                <h3>最新绝育申请</h3>
+                <table class="table" id="neuterApplications">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>申请人</th>
+                            <th>猫咪</th>
+                            <th>绝育费用</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 动态填充数据 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!--尾部-->
@@ -133,6 +170,48 @@
                 arrShow: true,
                 dotShow: true,
                 touch: false,
+            });
+
+            // 获取最新投喂记录
+            $.ajax({
+                url: '/getFeedingRecords',
+                method: 'GET',
+                success: function (data) {
+                    const records = JSON.parse(data);
+                    const tbody = $('#feedingRecords tbody');
+                    tbody.empty();
+                    records.forEach(record => {
+                        tbody.append(`
+                            <tr>
+                                <td>${record.Date}</td>
+                                <td>${record.VolunteerID}</td>
+                                <td>${record.HomeID}</td>
+                                <td>${record.Amount}</td>
+                            </tr>
+                        `);
+                    });
+                }
+            });
+
+            // 获取最新绝育申请
+            $.ajax({
+                url: '/getNeuterApplications',
+                method: 'GET',
+                success: function (data) {
+                    const applications = JSON.parse(data);
+                    const tbody = $('#neuterApplications tbody');
+                    tbody.empty();
+                    applications.forEach(application => {
+                        tbody.append(`
+                            <tr>
+                                <td>${application.VolunteerID}</td>
+                                <td>${application.CatID.CatName}</td>
+                                <td>${application.Price}</td>
+                                <td>${application.Status}</td>
+                            </tr>
+                        `);
+                    });
+                }
             });
         });
     </script>

@@ -14,6 +14,7 @@ h4 {
     color: rgb(113, 162, 35);
     margin-top: 8px;
     height: 100px;
+
 }
 
 .nav>li>a {
@@ -470,7 +471,6 @@ footer .line {
     float: right;
 }
 
-/*医疗资源*/
 
 .page2-title {
     background-image: url(../images/bc2.jpg);
@@ -541,7 +541,7 @@ footer .line {
 /*关于我们*/
 
 .page3-title {
-    background-image: url(../images/bc1.jpg);
+    background-image: url(../imge/page3.jpg);
     background-position: center center;
     background-size: cover;
     padding: 130px 0;
