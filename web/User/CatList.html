@@ -57,12 +57,12 @@
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 15px;
             margin-bottom: 0.5rem;
         }
 
         .card-text {
-            font-size: 0.9rem;
+            font-size: 14px;
         }
 
         .card img {
@@ -233,85 +233,74 @@
             </div>
         </div>
     </footer>
-
-    <script src="../js/jquery.min.js"></script>
-    <script src="../js/bootstrap.js"></script>
-    <script src="../js/hwslider.js"></script>
     <script>
-        $(document).ready(function () {
-            // 初始化幻灯片
-            $("#hwslider").hwSlider();
+        // 示例区域数据
+        const areas = ['区域1', '区域2', '区域3'];
 
-            // 获取用户信息
-            $.ajax({
-                url: '/getUserInfo',
-                method: 'GET',
-                success: function (data) {
-                    const userInfo = JSON.parse(data);
-                    const welcomeMessage = `用户${userInfo.VolunteerName}  <a href="../index.html">退出</a>`;
-                    $('#welcomeMessage').html(welcomeMessage);
-                },
-                error: function () {
-                    const welcomeMessage = `游客 <a href="../index.html">退出</a>`;
-                    $('#welcomeMessage').html(welcomeMessage);
-                }
-            });
-
-            // 获取区域信息并动态生成下拉选项
-            $.ajax({
-                url: '/getAreas',
-                method: 'GET',
-                success: function (data) {
-                    const areas = JSON.parse(data);
-                    const areaDropdown = $('#area-dropdown');
-                    areas.forEach(area => {
-                        const areaOption = `<a class="dropdown-item" href="#" onclick="selectOption(this, 'area')">${area}</a><br>`;
-                        areaDropdown.append(areaOption);
-                    });
-                },
-                error: function () {
-                    console.log('Failed to fetch areas');
-                }
-            });
-
-            // 获取猫信息并动态生成卡片
-            $.ajax({
-                url: '/getCats',
-                method: 'GET',
-                success: function (data) {
-                    const cats = JSON.parse(data);
-                    const catCardsContainer = $('#catCards');
-                    cats.forEach(cat => {
-                        const card = `
-                            <div class="card" style="width: 18rem;">
-                                <img src="${cat.image}" class="card-img-top" alt="${cat.name}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${cat.name}</h5>
-                                    <p class="card-text">性别: ${cat.gender}<br>归属状态: ${cat.status}</p>
-                                    <a href="CatDetail.html?id=${cat.id}" class="btn btn-primary">查看详情</a>
-                                </div>
-                            </div>
-                        `;
-                        catCardsContainer.append(card);
-                    });
-                },
-                error: function () {
-                    console.log('Failed to fetch cats');
-                }
-            });
-
-            // 筛选按钮点击事件
-            $('#filterButton').click(function () {
-                // 获取下拉菜单选择的值
-                const area = $('#dropdownMenuButton-area').text().trim();
-                const gender = $('#dropdownMenuButton-gender').text().trim();
-                const status = $('#dropdownMenuButton-status').text().trim();
-
-                // 构造查询字符串并跳转到筛选后的猫列表页面
-                const query = `?area=${area}&gender=${gender}&status=${status}`;
-                window.location.href = 'CatListFiltered.jsp' + query;
-            });
+        // 动态生成区域选项
+        const areaDropdown = document.getElementById('area-dropdown');
+        areas.forEach(area => {
+            const areaOption = document.createElement('a');
+            areaOption.className = 'dropdown-item';
+            areaOption.href = '#';
+            areaOption.textContent = area;
+            areaOption.onclick = function () {
+                selectOption(this, 'area');
+            };
+            areaDropdown.appendChild(areaOption);
         });
+
+        // 筛选选项数据
+        let selectedFilters = {
+            area: '全部区域',
+            gender: '全部性别',
+            status: '全部状态'
+        };
+
+        function selectOption(element, filterType) {
+            selectedFilters[filterType] = element.textContent;
+        }
+
+        document.getElementById('filterButton').addEventListener('click', () => {
+            filterCards();
+        });
+
+        // 示例卡片数据
+        const cats = [
+            { name: '猫1', gender: '雄性', status: '流浪', area: '区域1', imgSrc: 'https://via.placeholder.com/150' },
+            { name: '猫2', gender: '雌性', status: '失踪', area: '区域2', imgSrc: 'https://via.placeholder.com/150' },
+            { name: '猫3', gender: '雄性', status: '被领养', area: '区域1', imgSrc: 'https://via.placeholder.com/150' },
+            // 更多示例数据...
+        ];
+
+        function filterCards() {
+            const filteredCats = cats.filter(cat => {
+                const areaMatch = selectedFilters.area === '全部区域' || cat.area === selectedFilters.area;
+                const genderMatch = selectedFilters.gender === '全部性别' || cat.gender === selectedFilters.gender;
+                const statusMatch = selectedFilters.status === '全部状态' || cat.status === selectedFilters.status;
+                return areaMatch && genderMatch && statusMatch;
+            });
+
+            const catCards = document.getElementById('catCards');
+            catCards.innerHTML = ''; // 清空卡片容器
+            filteredCats.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.width = '18rem';
+                card.innerHTML = `
+                    <img src="${cat.imgSrc}" class="card-img-top" alt="${cat.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${cat.name}</h5>
+                        <p class="card-text">性别: ${cat.gender}<br>归属状态: ${cat.status}</p>
+                        <a href="#" class="btn btn-primary">查看详情</a>
+                    </div>
+                `;
+                catCards.appendChild(card);
+            });
+        }
+
+        // 页面加载时初始化卡片
+        window.onload = filterCards;
     </script>
 </body>
 
