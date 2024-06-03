@@ -57,7 +57,8 @@
         <div style="text-align: center;">
             <h2>用户注册</h2>
         </div>
-        <form id="registerForm" style="text-align: center;">
+        <form method="post" action="register" onsubmit=" return check(this)" id="registerForm"
+            style="text-align: center;">
             <div class="item">
                 昵称：<input type="text" name="VolunteerName" id="VolunteerName" required placeholder="请输入您的昵称">
             </div><br>
@@ -74,7 +75,7 @@
             </div>
             <br><br>
             <input type="checkbox" id="yes" checked="checked"> <label for="yes">我同意注册条款和用户加入标准</label><br><br>
-            <a href="login.html">已有账号？立即登录</a>
+            <a href="login.jsp">已有账号？立即登录</a>
         </form><br>
     </div>
     <div class="alert alert-danger" role="alert" id="error-message" style="display: none;">
