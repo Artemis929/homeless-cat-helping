@@ -102,79 +102,45 @@
         </div>
     </nav>
 
-    <!-- 筛选按钮组 -->
+    <!-- 筛选部分 -->
     <div class="container">
         <div class="filter-group">
             <div class="btn-group">
-                <button type="button" class="btn btn-success dropdown-toggle" id="dropdownMenuButton-area"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    区域 <i class="bi bi-arrow-bar-down"></i>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                    aria-expanded="false" id="regionDropdown">
+                    区域
                 </button>
-                <div class="dropdown-menu" id="area-dropdown">
-                    <!-- 动态生成区域选项 -->
+                <div class="dropdown-menu" id="regionMenu">
+                    <!-- 动态加载区域选项 -->
                 </div>
             </div>
-
             <div class="btn-group">
-                <button type="button" class="btn btn-success dropdown-toggle" id="dropdownMenuButton-gender"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    性别 <i class="bi bi-arrow-bar-down"></i>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                    aria-expanded="false" id="genderDropdown">
+                    性别
                 </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'gender')">雄性</a><br>
-                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'gender')">雌性</a><br>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'gender')">全部性别</a>
+                <div class="dropdown-menu" id="genderMenu">
+                    <a class="dropdown-item" href="#" onclick="selectOption('genderDropdown', 'genderMenu', '公')">公</a>
+                    <a class="dropdown-item" href="#" onclick="selectOption('genderDropdown', 'genderMenu', '母')">母</a>
                 </div>
             </div>
-
             <div class="btn-group">
-                <button type="button" class="btn btn-success dropdown-toggle" id="dropdownMenuButton-status"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    归属状态 <i class="bi bi-arrow-bar-down"></i>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                    aria-expanded="false" id="statusDropdown">
+                    归属状态
                 </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">流浪</a><br>
-                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">失踪</a><br>
-                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">喵星</a><br>
-                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">被领养</a><br>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">全部状态</a>
+                <div class="dropdown-menu" id="statusMenu">
+                    <a class="dropdown-item" href="#"
+                        onclick="selectOption('statusDropdown', 'statusMenu', '待领养')">待领养</a>
+                    <a class="dropdown-item" href="#"
+                        onclick="selectOption('statusDropdown', 'statusMenu', '已领养')">已领养</a>
                 </div>
             </div>
-
-            <button type="button" class="btn btn-primary" style="margin-top: 0px;" id="filterButton">筛选</button>
+            <button type="button" class="btn btn-primary" onclick="filterCats()">筛选</button>
         </div>
 
-        <!-- 卡片容器 -->
         <div class="card-columns" id="catCards">
-            <!-- 示例卡片 -->
-            <div class="card" style="width: 18rem;">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="猫1">
-                <div class="card-body">
-                    <h5 class="card-title">猫1</h5>
-                    <p class="card-text">性别: 雄性<br>归属状态: 流浪</p>
-                    <a href="#" class="btn btn-primary">查看详情</a>
-                </div>
-            </div>
-
-            <div class="card" style="width: 18rem;">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="猫2">
-                <div class="card-body">
-                    <h5 class="card-title">猫2</h5>
-                    <p class="card-text">性别: 雌性<br>归属状态: 失踪</p>
-                    <a href="#" class="btn btn-primary">查看详情</a>
-                </div>
-            </div>
-
-            <div class="card" style="width: 18rem;">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="猫3">
-                <div class="card-body">
-                    <h5 class="card-title">猫3</h5>
-                    <p class="card-text">性别: 雄性<br>归属状态: 被领养</p>
-                    <a href="#" class="btn btn-primary">查看详情</a>
-                </div>
-            </div>
+            <!-- 动态加载小猫卡片 -->
         </div>
     </div>
 
@@ -233,74 +199,80 @@
             </div>
         </div>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        // 示例区域数据
-        const areas = ['区域1', '区域2', '区域3'];
-
-        // 动态生成区域选项
-        const areaDropdown = document.getElementById('area-dropdown');
-        areas.forEach(area => {
-            const areaOption = document.createElement('a');
-            areaOption.className = 'dropdown-item';
-            areaOption.href = '#';
-            areaOption.textContent = area;
-            areaOption.onclick = function () {
-                selectOption(this, 'area');
-            };
-            areaDropdown.appendChild(areaOption);
+        document.addEventListener('DOMContentLoaded', function () {
+            loadRegions();
         });
 
-        // 筛选选项数据
-        let selectedFilters = {
-            area: '全部区域',
-            gender: '全部性别',
-            status: '全部状态'
-        };
-
-        function selectOption(element, filterType) {
-            selectedFilters[filterType] = element.textContent;
-        }
-
-        document.getElementById('filterButton').addEventListener('click', () => {
-            filterCards();
-        });
-
-        // 示例卡片数据
-        const cats = [
-            { name: '猫1', gender: '雄性', status: '流浪', area: '区域1', imgSrc: 'https://via.placeholder.com/150' },
-            { name: '猫2', gender: '雌性', status: '失踪', area: '区域2', imgSrc: 'https://via.placeholder.com/150' },
-            { name: '猫3', gender: '雄性', status: '被领养', area: '区域1', imgSrc: 'https://via.placeholder.com/150' },
-            // 更多示例数据...
-        ];
-
-        function filterCards() {
-            const filteredCats = cats.filter(cat => {
-                const areaMatch = selectedFilters.area === '全部区域' || cat.area === selectedFilters.area;
-                const genderMatch = selectedFilters.gender === '全部性别' || cat.gender === selectedFilters.gender;
-                const statusMatch = selectedFilters.status === '全部状态' || cat.status === selectedFilters.status;
-                return areaMatch && genderMatch && statusMatch;
-            });
-
-            const catCards = document.getElementById('catCards');
-            catCards.innerHTML = ''; // 清空卡片容器
-            filteredCats.forEach(cat => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.style.width = '18rem';
-                card.innerHTML = `
-                    <img src="${cat.imgSrc}" class="card-img-top" alt="${cat.name}">
-                    <div class="card-body">
-                        <h5 class="card-title">${cat.name}</h5>
-                        <p class="card-text">性别: ${cat.gender}<br>归属状态: ${cat.status}</p>
-                        <a href="#" class="btn btn-primary">查看详情</a>
-                    </div>
-                `;
-                catCards.appendChild(card);
+        function loadRegions() {
+            $.ajax({
+                url: '/getRegions', // 你的后台接口
+                method: 'GET',
+                success: function (data) {
+                    const regionMenu = document.getElementById('regionMenu');
+                    data.forEach(region => {
+                        const a = document.createElement('a');
+                        a.className = 'dropdown-item';
+                        a.href = '#';
+                        a.textContent = region;
+                        a.onclick = function () {
+                            selectOption('regionDropdown', 'regionMenu', region);
+                        };
+                        regionMenu.appendChild(a);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching regions:', error);
+                }
             });
         }
 
-        // 页面加载时初始化卡片
-        window.onload = filterCards;
+        function selectOption(buttonId, menuId, value) {
+            const button = document.getElementById(buttonId);
+            button.textContent = value;
+            button.setAttribute('data-selected', value);
+        }
+
+        function filterCats() {
+            const region = document.getElementById('regionDropdown').getAttribute('data-selected');
+            const gender = document.getElementById('genderDropdown').getAttribute('data-selected');
+            const status = document.getElementById('statusDropdown').getAttribute('data-selected');
+
+            $.ajax({
+                url: '/filterCats', // 你的后台接口
+                method: 'GET',
+                data: {
+                    region: region,
+                    gender: gender,
+                    status: status
+                },
+                success: function (data) {
+                    const catCards = document.getElementById('catCards');
+                    catCards.innerHTML = ''; // 清空之前的内容
+                    data.forEach(cat => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.style.width = '18rem';
+                        card.innerHTML = `
+                            <img src="${cat.image}" class="card-img-top" alt="${cat.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${cat.name}</h5>
+                                <p class="card-text">${cat.description}</p>
+                                <a href="#" class="btn btn-primary">查看详情</a>
+                            </div>
+                        `;
+                        catCards.appendChild(card);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching cats:', error);
+                }
+            });
+        }
     </script>
 </body>
 
