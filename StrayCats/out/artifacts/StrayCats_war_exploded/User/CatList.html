@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看流浪猫</title>
+    <!-- bootstrap js文件 -->
+    <script type="module">
+        import { Toast } from 'bootstrap.esm.min.js'
+
+        Array.from(document.querySelectorAll('.toast'))
+            .forEach(toastNode => new Toast(toastNode))
+    </script>
+    <!--重置样式-->
+    <link href="../css/reset.css" rel="stylesheet">
+    <!--幻灯片-->
+    <link href="../css/hwslider.css" rel="stylesheet">
+    <!--bootstrap css 文件-->
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
+    <!--字体 -->
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!--自定义 -->
+    <link href="../css/style.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
+
+    <style>
+        .filter-group {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .filter-group .btn-group {
+            margin-right: 20px;
+        }
+
+        .btn {
+            font-size: 16px;
+        }
+
+        .card-columns {
+            column-count: 3;
+            max-height: 70vh;
+            /* 控制最大高度 */
+            overflow-y: auto;
+            /* 启用垂直滚动条 */
+        }
+
+        .card {
+            margin: 10px;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            font-size: 14px;
+        }
+
+        .card img {
+            height: 150px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="welcomeMessage" style="text-align: right;"></div>
+    <!-- 头部 -->
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <!-- 移动端导航图标 -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="#" class="navbar-brand"><img src="../imge/logo.png" alt="logo" height="85px"></a>
+            </div>
+
+            <!-- 导航-->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="homeUser.html">首页 </a></li>
+                    <li><a href="CatList.html" class="active">查看流浪猫<span class="sr-only"></span></a></li>
+                    <li><a href="HomeList.html">爱心猫屋</a></li>
+                    <li><a href="NeuterApplication.html">绝育申请</a></li>
+                    <li><a href="FeedRecord.html">我的投喂记录</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 筛选按钮组 -->
+    <div class="container">
+        <div class="filter-group">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" id="dropdownMenuButton-area"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    区域 <i class="bi bi-arrow-bar-down"></i>
+                </button>
+                <div class="dropdown-menu" id="area-dropdown">
+                    <!-- 动态生成区域选项 -->
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" id="dropdownMenuButton-gender"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    性别 <i class="bi bi-arrow-bar-down"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'gender')">雄性</a><br>
+                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'gender')">雌性</a><br>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'gender')">全部性别</a>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" id="dropdownMenuButton-status"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    归属状态 <i class="bi bi-arrow-bar-down"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">流浪</a><br>
+                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">失踪</a><br>
+                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">喵星</a><br>
+                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">被领养</a><br>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" onclick="selectOption(this, 'status')">全部状态</a>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" style="margin-top: 0px;" id="filterButton">筛选</button>
+        </div>
+
+        <!-- 卡片容器 -->
+        <div class="card-columns" id="catCards">
+            <!-- 示例卡片 -->
+            <div class="card" style="width: 18rem;">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="猫1">
+                <div class="card-body">
+                    <h5 class="card-title">猫1</h5>
+                    <p class="card-text">性别: 雄性<br>归属状态: 流浪</p>
+                    <a href="#" class="btn btn-primary">查看详情</a>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="猫2">
+                <div class="card-body">
+                    <h5 class="card-title">猫2</h5>
+                    <p class="card-text">性别: 雌性<br>归属状态: 失踪</p>
+                    <a href="#" class="btn btn-primary">查看详情</a>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="猫3">
+                <div class="card-body">
+                    <h5 class="card-title">猫3</h5>
+                    <p class="card-text">性别: 雄性<br>归属状态: 被领养</p>
+                    <a href="#" class="btn btn-primary">查看详情</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--尾部-->
+    <footer>
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-12 ">
+                        <div class="single-footer-widget">
+                            <div class="section-heading">
+                                <h4>关于我们</h4>
+                                <div class="line"></div>
+                            </div>
+                            <p>“StrayCats-Helping”是与智能设备云联动的网站
+                                可实现云投喂、云吸猫、云监控，
+                                更可以聚集更多的爱猫人士，一起努力推行TNR。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 f1">
+                        <div class="single-footer-widget">
+                            <div class="section-heading">
+                                <h4>服务</h4>
+                                <div class="line"></div>
+                            </div>
+                            <ul class="footer-service">
+                                <li><a href="#"><span class="fa fa-check"></span>云喂养</a></li>
+                                <li><a href="#"><span class="fa fa-check"></span>捕捉 绝育 放回</a></li>
+                                <li><a href="#"><span class="fa fa-check"></span>管理爱心猫屋</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 f2">
+                        <div class="single-footer-widget">
+                            <div class="section-heading">
+                                <h4>关注我们</h4>
+                                <div class="line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="single-footer-widget">
+                            <div class="section-heading">
+                                <h4>联系我们</h4>
+                                <div class="line"></div>
+                            </div>
+                            <address class="contact-info">
+                                <p><span class="fa fa-home"></span>123456789</p>
+                                <p><span class="fa fa-phone"></span>123456789</p>
+                                <p><span class="fa fa-envelope"></span>123456789</p>
+                            </address>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // 示例区域数据
+        const areas = ['区域1', '区域2', '区域3'];
+
+        // 动态生成区域选项
+        const areaDropdown = document.getElementById('area-dropdown');
+        areas.forEach(area => {
+            const areaOption = document.createElement('a');
+            areaOption.className = 'dropdown-item';
+            areaOption.href = '#';
+            areaOption.textContent = area;
+            areaOption.onclick = function () {
+                selectOption(this, 'area');
+            };
+            areaDropdown.appendChild(areaOption);
+        });
+
+        // 筛选选项数据
+        let selectedFilters = {
+            area: '全部区域',
+            gender: '全部性别',
+            status: '全部状态'
+        };
+
+        function selectOption(element, filterType) {
+            selectedFilters[filterType] = element.textContent;
+        }
+
+        document.getElementById('filterButton').addEventListener('click', () => {
+            filterCards();
+        });
+
+        // 示例卡片数据
+        const cats = [
+            { name: '猫1', gender: '雄性', status: '流浪', area: '区域1', imgSrc: 'https://via.placeholder.com/150' },
+            { name: '猫2', gender: '雌性', status: '失踪', area: '区域2', imgSrc: 'https://via.placeholder.com/150' },
+            { name: '猫3', gender: '雄性', status: '被领养', area: '区域1', imgSrc: 'https://via.placeholder.com/150' },
+            // 更多示例数据...
+        ];
+
+        function filterCards() {
+            const filteredCats = cats.filter(cat => {
+                const areaMatch = selectedFilters.area === '全部区域' || cat.area === selectedFilters.area;
+                const genderMatch = selectedFilters.gender === '全部性别' || cat.gender === selectedFilters.gender;
+                const statusMatch = selectedFilters.status === '全部状态' || cat.status === selectedFilters.status;
+                return areaMatch && genderMatch && statusMatch;
+            });
+
+            const catCards = document.getElementById('catCards');
+            catCards.innerHTML = ''; // 清空卡片容器
+            filteredCats.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.width = '18rem';
+                card.innerHTML = `
+                    <img src="${cat.imgSrc}" class="card-img-top" alt="${cat.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${cat.name}</h5>
+                        <p class="card-text">性别: ${cat.gender}<br>归属状态: ${cat.status}</p>
+                        <a href="#" class="btn btn-primary">查看详情</a>
+                    </div>
+                `;
+                catCards.appendChild(card);
+            });
+        }
+
+        // 页面加载时初始化卡片
+        window.onload = filterCards;
+    </script>
+</body>
+
+</html>
