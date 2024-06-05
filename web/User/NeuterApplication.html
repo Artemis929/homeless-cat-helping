@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>查看流浪猫</title>
+    <title>绝育申请</title>
     <!-- bootstrap js文件 -->
     <script type="module">
         import { Toast } from 'bootstrap.esm.min.js'
@@ -45,14 +45,33 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="homeUser.html">首页 </a></li>
-                    <li><a href="CatList.html" class="active">查看流浪猫<span class="sr-only"></span></a></li>
+                    <li><a href="CatList.html">查看流浪猫</a></li>
                     <li><a href="HomeList.html">爱心猫屋</a></li>
-                    <li><a href="NeuterApplication.html">绝育申请</a></li>
+                    <li><a href="NeuterApplication.html" class="active">绝育申请<span class="sr-only"></span></a></li>
                     <li><a href="FeedRecord.html">我的投喂记录</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+
+    <div class="container">
+        <h3 style="text-align: center;">可申请绝育的流浪猫</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">小猫照片</th>
+                    <th scope="col">小猫ID</th>
+                    <th scope="col">昵称</th>
+                    <th scope="col">性别</th>
+                    <th scope="col">绝育费用</th>
+                    <th scope="col">申请绝育</th>
+                </tr>
+            </thead>
+            <tbody id="catList">
+                <!-- 动态加载流浪猫数据 -->
+            </tbody>
+        </table>
+    </div>
 
     <!--尾部-->
     <footer>
@@ -138,10 +157,39 @@
                 }
             });
 
-
-
+            // 动态加载可申请绝育的流浪猫数据
+            loadCats();
         });
 
+        function loadCats() {
+            $.ajax({
+                url: '/getCatsForNeuter', // 你的后台接口
+                method: 'GET',
+                success: function (data) {
+                    const catList = document.getElementById('catList');
+                    catList.innerHTML = ''; // 清空之前的内容
+                    data.forEach(cat => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td><img src="${cat.photo}" alt="猫照片" style="width: 100px; height: auto;"></td>
+                            <td>${cat.id}</td>
+                            <td>${cat.name}</td>
+                            <td>${cat.gender}</td>
+                            <td>${cat.neuterFee}</td>
+                            <td><button class="btn btn-primary" onclick="applyNeuter(${cat.id})">申请绝育</button></td>
+                        `;
+                        catList.appendChild(row);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching cats:', error);
+                }
+            });
+        }
+
+        function applyNeuter(catId) {
+            window.location.href = `payNeuterFee.html?catId=${catId}`;
+        }
     </script>
 
 </body>

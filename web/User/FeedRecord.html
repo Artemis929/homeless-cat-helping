@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>查看流浪猫</title>
+    <title>我的投喂记录</title>
     <!-- bootstrap js文件 -->
     <script type="module">
         import { Toast } from 'bootstrap.esm.min.js'
@@ -45,14 +45,52 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="homeUser.html">首页 </a></li>
-                    <li><a href="CatList.html" class="active">查看流浪猫<span class="sr-only"></span></a></li>
+                    <li><a href="CatList.html">查看流浪猫</a></li>
                     <li><a href="HomeList.html">爱心猫屋</a></li>
                     <li><a href="NeuterApplication.html">绝育申请</a></li>
-                    <li><a href="FeedRecord.html">我的投喂记录</a></li>
+                    <li><a href="FeedRecord.html" class="active">我的投喂记录<span class="sr-only"></span></a></li>
                 </ul>
             </div>
         </div>
     </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h3 style="text-align: center;">投喂排行榜</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">排名</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">总投喂量</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingTable">
+                        <!-- 动态加载投喂排行榜数据 -->
+                    </tbody>
+                </table>
+                <div id="userRanking" style="text-align: center; margin-top: 10px;">
+                    <!-- 动态加载用户投喂排名 -->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3 style="text-align: center;">我的投喂记录</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">日期</th>
+                            <th scope="col">猫屋ID</th>
+                            <th scope="col">投喂量</th>
+                            <th scope="col">价格</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedingRecordTable">
+                        <!-- 动态加载我的投喂记录数据 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <!--尾部-->
     <footer>
@@ -131,6 +169,9 @@
                     const userInfo = JSON.parse(data);
                     const welcomeMessage = `用户${userInfo.VolunteerName}  <a href="../index.html">退出</a>`;
                     $('#welcomeMessage').html(welcomeMessage);
+
+                    // 加载用户的投喂排名
+                    loadUserRanking(userInfo.VolunteerName);
                 },
                 error: function () {
                     const welcomeMessage = `游客 <a href="../index.html">退出</a>`;
@@ -138,10 +179,72 @@
                 }
             });
 
-
-
+            // 动态加载投喂排行榜和我的投喂记录数据
+            loadRankingTable();
+            loadFeedingRecordTable();
         });
 
+        function loadRankingTable() {
+            $.ajax({
+                url: '/getRanking', // 你的后台接口
+                method: 'GET',
+                success: function (data) {
+                    const rankingTable = document.getElementById('rankingTable');
+                    rankingTable.innerHTML = ''; // 清空之前的内容
+                    data.forEach((item, index) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <th scope="row">${index + 1}</th>
+                            <td>${item.id}</td>
+                            <td>${item.totalFeed}</td>
+                        `;
+                        rankingTable.appendChild(row);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching ranking data:', error);
+                }
+            });
+        }
+
+        function loadFeedingRecordTable() {
+            $.ajax({
+                url: '/getFeedingRecords', // 你的后台接口
+                method: 'GET',
+                success: function (data) {
+                    const feedingRecordTable = document.getElementById('feedingRecordTable');
+                    feedingRecordTable.innerHTML = ''; // 清空之前的内容
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <th scope="row">${item.date}</th>
+                            <td>${item.homeId}</td>
+                            <td>${item.feedAmount}</td>
+                            <td>${item.price}</td>
+                        `;
+                        feedingRecordTable.appendChild(row);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching feeding records:', error);
+                }
+            });
+        }
+
+        function loadUserRanking(userName) {
+            $.ajax({
+                url: '/getUserRanking', // 你的后台接口
+                method: 'GET',
+                data: { userName: userName },
+                success: function (data) {
+                    const userRanking = document.getElementById('userRanking');
+                    userRanking.innerHTML = `我的当前排名: ${data.rank} 名`;
+                },
+                error: function (error) {
+                    console.error('Error fetching user ranking:', error);
+                }
+            });
+        }
     </script>
 
 </body>
